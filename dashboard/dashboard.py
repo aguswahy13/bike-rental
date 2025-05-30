@@ -14,11 +14,15 @@ st.set_page_config(
 # Caching data loading for performance
 @st.cache_data
 def load_data():
-    df_day = pd.read_csv("main-day.csv", parse_dates=["date"])
-    df_hour = pd.read_csv("main-hour.csv", parse_dates=["date"])
+    # Log the current working directory
+    st.write("Current Working Directory:", os.getcwd())
+    
+    # Load data with correct paths
+    df_day = pd.read_csv("main-day.csv", parse_dates=["date"])  # Adjust path if necessary
+    df_hour = pd.read_csv("main-hour.csv", parse_dates=["date"])  # Adjust path if necessary
     df_hour.sort_values("date", inplace=True)
     return df_day, df_hour
-
+    
 # Load datasets
 df_day, df_hour = load_data()
 
