@@ -1,34 +1,37 @@
+import os
 import streamlit as st
 import pandas as pd
 import altair as alt
-import os
 
-# Page config...
-st.set_page_config(...)
+# Debug — remove once it’s working
+print("🔍 CWD:", os.getcwd())
+print("📂 Root:", os.listdir(os.getcwd()))
+print("📂 dashboard/:", os.listdir(os.path.join(os.getcwd(), "dashboard")))
 
-# Caching data loading for performance
-@st.cache_data
-def load_data():
-    base_dir = os.path.dirname(__file__)              # path to dashboard/
-    day_path  = os.path.join(base_dir, "main-day.csv")
-    hour_path = os.path.join(base_dir, "main-hour.csv")
-
-    # now these will always resolve correctly
-    df_day  = pd.read_csv(day_path,  parse_dates=["date"])
-    df_hour = pd.read_csv(hour_path, parse_dates=["date"])
-    df_hour.sort_values("date", inplace=True)
-    return df_day, df_hour
-
-# Load datasets
-df_day, df_hour = load_data()
-    
-# Page configuration
+# Must come first
 st.set_page_config(
     page_title="Bike Sharing Dashboard",
     page_icon="🚲",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+@st.cache_data
+def load_data():
+    project_root = os.getcwd()
+    data_dir     = os.path.join(project_root, "dashboard")
+
+    day_path  = os.path.join(data_dir, "main-day.csv")
+    hour_path = os.path.join(data_dir, "main-hour.csv")
+    print("Loading:", day_path, os.path.exists(day_path))
+    print("Loading:", hour_path, os.path.exists(hour_path))
+
+    df_day  = pd.read_csv(day_path,  parse_dates=["date"])
+    df_hour = pd.read_csv(hour_path, parse_dates=["date"])
+    df_hour.sort_values("date", inplace=True)
+    return df_day, df_hour
+
+df_day, df_hour = load_data()
 
 # Sidebar filters
 st.sidebar.header("Filter Options")
