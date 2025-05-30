@@ -3,6 +3,25 @@ import pandas as pd
 import altair as alt
 import os
 
+# Page config...
+st.set_page_config(...)
+
+# Caching data loading for performance
+@st.cache_data
+def load_data():
+    base_dir = os.path.dirname(__file__)              # path to dashboard/
+    day_path  = os.path.join(base_dir, "main-day.csv")
+    hour_path = os.path.join(base_dir, "main-hour.csv")
+
+    # now these will always resolve correctly
+    df_day  = pd.read_csv(day_path,  parse_dates=["date"])
+    df_hour = pd.read_csv(hour_path, parse_dates=["date"])
+    df_hour.sort_values("date", inplace=True)
+    return df_day, df_hour
+
+# Load datasets
+df_day, df_hour = load_data()
+    
 # Page configuration
 st.set_page_config(
     page_title="Bike Sharing Dashboard",
@@ -10,21 +29,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# Caching data loading for performance
-@st.cache_data
-def load_data():
-    # Log the current working directory
-    st.write("Current Working Directory:", os.getcwd())
-    
-    # Load data with correct paths
-    df_day = pd.read_csv("main-day.csv", parse_dates=["date"])  # Adjust path if necessary
-    df_hour = pd.read_csv("main-hour.csv", parse_dates=["date"])  # Adjust path if necessary
-    df_hour.sort_values("date", inplace=True)
-    return df_day, df_hour
-    
-# Load datasets
-df_day, df_hour = load_data()
 
 # Sidebar filters
 st.sidebar.header("Filter Options")
