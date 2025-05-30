@@ -1,14 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-
-# ---------------------------------------------
-# Revised Bike Sharing Dashboard
-# - Wide layout with cohesive color palette
-# - Interactive sidebar filters for date, season, and weather
-# - Clear KPI metrics and section headers
-# - Altair charts with smooth styling and tooltips
-# ---------------------------------------------
+import os
 
 # Page configuration
 st.set_page_config(
